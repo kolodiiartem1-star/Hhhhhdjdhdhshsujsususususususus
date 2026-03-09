@@ -1,0 +1,35 @@
+name: Build AE2 Whitelist Mod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Compile Java
+        run: |
+          mkdir -p build/classes
+          javac -d build/classes src/main/java/com/example/ae2whitelist/AE2AnnihilationWhitelist.java
+
+      - name: Create jar
+        run: |
+          mkdir -p build/jar
+          jar cf build/jar/AE2WhitelistMod-1.0.jar -C build/classes com
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: AE2WhitelistMod
+          path: build/jar/AE2WhitelistMod-1.0.jar
